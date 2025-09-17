@@ -1,0 +1,15 @@
+venv
+.idea
+__pycache__
+pytest.cache
+*.pyc
+DS_Store
+.DS_Store
+
+*.py[oc]
+build/
+wheels/
+*.egg-info
+
+.venv
+.env
