@@ -77,9 +77,14 @@ def test_delete_meme_removes_resource(memes_client, created_meme):
 
 
 @pytest.mark.parametrize("body", [
+    {"text": "", "url": "https://example.com/test.png", "tags": [], "info": {}},
+    {"text": "test", "url": "", "tags": ["tag"], "info": {"info": 1}},
     {},
-    {"invalid_field": "value"}
 ])
 def test_create_meme_invalid_data_returns_error(memes_client, body):
-    resp = requests.post(f"{memes_client.base_url}/meme", json=body, headers=memes_client.headers)
+    resp = requests.post(
+        f"{memes_client.base_url}/meme",
+        json=body,
+        headers=memes_client.headers
+    )
     assert resp.status_code == 400
