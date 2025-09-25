@@ -1,27 +1,20 @@
 import pytest
 from endpoints.authorize import Authorize
-from endpoints.meme import Meme
+
+NAME = "test_user"
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope="session")
 def auth_token():
+    """Токен авторизации на всю сессию pytest."""
     auth = Authorize()
-    token = auth.get_token("TestUser")
+    token = auth.get_token(NAME)
+    if not auth.check_token_alive(token):
+        token = auth.get_token(NAME)
     return token
 
 
-@pytest.fixture()
-def meme_endpoint(auth_token):
-    meme = Meme()
-    meme.headers = {"Authorization": auth_token}
-    return meme
-
-
-@pytest.fixture()
-def meme_body():
-    return {
-        "text": "Funny meme",
-        "url": "http://example.com/meme.jpg",
-        "tags": ["funny", "new"],
-        "info": {"author": "me"}
-    }
+@pytest.fixture(scope="session")
+def auth_headers(auth_token):
+    """Заголовки с токеном для клиентов API."""
+    return {"Authorization": auth_token}
